@@ -1,10 +1,15 @@
 # 2D Game Physics Engine
 
-[![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
-
 ## Build & Run
 
-- `nix develop` to enable Nix
+### Apple MacOS (Homebrew)
+
+install cmake, sdl2, sdl2_image, sdl2_gfx using homebrew:
+
+```
+brew install cmake sdl2 sdl2_image sdl2_gfx
+```
+
 - `cmake . -B build`
 - `cmake --build build`
 - `./build/src/main`

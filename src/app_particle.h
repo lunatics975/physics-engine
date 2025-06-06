@@ -19,11 +19,11 @@ class AppParticle {
     SDL_Rect liquid;
 
     Vec2 anchor;
-    float rest_chain_length = 15;
+    [[maybe_unused]] float rest_chain_length = 15;
     float rest_soft_body_length = 200;
-    float k_chain = 300;
+    [[maybe_unused]] float k_chain = 300;
     float k_soft_body = 1500;
-    const int NUM_CHAINED_PARTICLES = 15;
+    [[maybe_unused]] const int NUM_CHAINED_PARTICLES = 15;
     const int NUM_SOFT_BODY_PARTICLES = 4;
 
   public:

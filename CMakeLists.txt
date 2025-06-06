@@ -9,17 +9,52 @@ endif()
 
 project(
   2d-game-physics-engine
-  VERSION 0.1.0
+  VERSION 1.0.0
   LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+# Find SDL2 packages
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SDL2 REQUIRED sdl2)
+pkg_check_modules(SDL2_GFX REQUIRED SDL2_gfx)
+pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
 
-# for apple MacOS (homebrew):
-include_directories(/opt/homebrew/include/SDL2)
-link_directories(/opt/homebrew/lib)
+# Fallback for systems without pkg-config or if SDL2 not found
+if(NOT SDL2_FOUND)
+  if(APPLE)
+    # For Apple MacOS (homebrew)
+    set(SDL2_INCLUDE_DIRS /opt/homebrew/include/SDL2)
+    set(SDL2_LIBRARIES SDL2)
+    set(SDL2_LIBRARY_DIRS /opt/homebrew/lib)
+  else()
+    message(FATAL_ERROR "SDL2 not found. Please install SDL2 development libraries.")
+  endif()
+endif()
+
+# Fallback for SDL2_gfx if not found via pkg-config
+if(NOT SDL2_GFX_FOUND)
+  if(APPLE)
+    set(SDL2_GFX_INCLUDE_DIRS /opt/homebrew/include/SDL2)
+    set(SDL2_GFX_LIBRARIES SDL2_gfx)
+    set(SDL2_GFX_LIBRARY_DIRS /opt/homebrew/lib)
+  else()
+    message(FATAL_ERROR "SDL2_gfx not found. Please install SDL2_gfx development libraries.")
+  endif()
+endif()
+
+# Fallback for SDL2_image if not found via pkg-config
+if(NOT SDL2_IMAGE_FOUND)
+  if(APPLE)
+    set(SDL2_IMAGE_INCLUDE_DIRS /opt/homebrew/include/SDL2)
+    set(SDL2_IMAGE_LIBRARIES SDL2_image)
+    set(SDL2_IMAGE_LIBRARY_DIRS /opt/homebrew/lib)
+  else()
+    message(FATAL_ERROR "SDL2_image not found. Please install SDL2_image development libraries.")
+  endif()
+endif()
 
 set(CMAKE_C_COMPILER gcc)
 if(MSVC)
@@ -33,12 +68,12 @@ endif()
 if(APPLE)
   add_compile_options(-mmacosx-version-min=10.15)
 endif()
+
 # ##############################################################################
 # Modules and scripts   ##
 # ##############################################################################
 
 # Standard CMake modules
-
 include(CTest) # Must be called before adding tests but after calling project().
                # This automatically calls enable_testing() and configures ctest
                # targets when using Make/Ninja
@@ -53,12 +88,9 @@ include(InstallRequiredSystemLibraries) # Tell CMake that the `install` target
 include(CMakePackageConfigHelpers) # Helper to create relocatable packages
 
 # Custom modules and scripts
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake") # Make our
                                                                  # cmake scripts
                                                                  # available
-
-# include(BuildHelpers) # Helpers for writing cmake files
 
 # ##############################################################################
 # Options  ##
@@ -93,37 +125,3 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 add_subdirectory(src)
 # add_subdirectory(tests)
-
-# ##############################################################################
-# Packaging ##
-# ##############################################################################
-
-# if(ENABLE_INSTALL) # Use version checking helper provided by CMake so that
-# users can # safely use a version number in their find_package calls
-# write_basic_package_version_file( ${PROJECT_NAME}ConfigVersion.cmake VERSION
-# ${PROJECT_VERSION} COMPATIBILITY SameMajorVersion)
-#
-# configure_package_config_file( ${PROJECT_SOURCE_DIR}/cmake/Config.cmake.in
-# ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake INSTALL_DESTINATION
-# ${${PROJECT_NAME}_INSTALL_CMAKEDIR} NO_SET_AND_CHECK_MACRO
-# NO_CHECK_REQUIRED_COMPONENTS_MACRO)
-#
-# install( TARGETS what_time simple EXPORT ${PROJECT_NAME}_Targets INCLUDES
-# DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-#
-# install(DIRECTORY src DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} FILES_MATCHING
-# PATTERN *.h)
-#
-# # This time, install all the exported targets under the #
-# ${PROJECT_NAME}_Targets name. install( EXPORT ${PROJECT_NAME}_Targets
-# NAMESPACE ${PROJECT_NAME}:: FILE ${PROJECT_NAME}Targets.cmake DESTINATION
-# ${${PROJECT_NAME}_INSTALL_CMAKEDIR})
-#
-# # So far we only installed the exported targets, now install the package
-# config files. # # If you do not list headers in the PUBLIC_HEADER property,
-# you will need to copy them using # `install(FILES)` or `install(DIRECTORY)`
-# too. # # In that case, you can use CMAKE_INSTALL_INCLUDEDIR as the base
-# destination path. install(FILES
-# ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
-# ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake DESTINATION
-# ${${PROJECT_NAME}_INSTALL_CMAKEDIR}) endif()

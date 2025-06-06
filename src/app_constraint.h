@@ -18,17 +18,17 @@ class AppConstraint {
 
     Vec2 push_force = Vec2(0, 0); // controlled by keyboard
     Vec2 mouse_cursor = Vec2(0, 0);
-    bool left_mouse_button_down = false;
+    [[maybe_unused]] bool left_mouse_button_down = false;
 
-    SDL_Rect liquid;
+    // SDL_Rect liquid;
 
     Vec2 anchor;
-    float rest_chain_length = 15;
-    float rest_soft_body_length = 200;
-    float k_chain = 300;
-    float k_soft_body = 1500;
-    const int NUM_CHAINED_BODIES = 15;
-    const int NUM_SOFT_BODY_BODIES = 4;
+    [[maybe_unused]] float rest_chain_length = 15;
+    [[maybe_unused]] float rest_soft_body_length = 200;
+    [[maybe_unused]] float k_chain = 300;
+    [[maybe_unused]] float k_soft_body = 1500;
+    [[maybe_unused]] const int NUM_CHAINED_BODIES = 15;
+    [[maybe_unused]] const int NUM_SOFT_BODY_BODIES = 4;
 
   public:
     AppConstraint() = default;
