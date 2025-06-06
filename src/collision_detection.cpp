@@ -124,7 +124,7 @@ bool CollisionDetection::is_colliding_polygon_polygon(
                 ->world_vertices[(i + 1) % ref_shape->world_vertices.size()];
         int num_clipped = ref_shape->clip_segment_to_line(
             contact_points, clipped_points, c0, c1);
-        std::cout << "num_clipped: " << num_clipped << std::endl;
+        // std::cout << "num_clipped: " << num_clipped << std::endl;
         if (num_clipped < 2)
             break;
 
