@@ -2,6 +2,8 @@
 .cache/
 build/
 
+*.vscode/**
+
 .DS_Store
 
 assets/angrybirds/._*
