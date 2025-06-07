@@ -11,17 +11,14 @@ target_compile_options(main PRIVATE ${SDL2_CFLAGS_OTHER} ${SDL2_GFX_CFLAGS_OTHER
 target_sources(
   main
   PRIVATE main.cpp
-          app_particle.cpp
           graphics.cpp
           vec2.cpp
           particle.cpp
           force.cpp
-          # app_rigid_body.cpp
           shape.cpp
           body.cpp
           collision_detection.cpp
           contact.h
-          # app_world.cpp
           world.cpp
           vec_n.cpp
           constraint.cpp

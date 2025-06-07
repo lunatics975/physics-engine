@@ -18,19 +18,46 @@
 
 bool AppConstraint::is_running() { return running; }
 
+void getWindowSize(int& width, int& height) {
+    SDL_DisplayMode dm;
+    if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
+        SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+        width = 800;  // fallback values
+        height = 600;
+        return;
+    }
+    width = dm.w;
+    height = dm.h;
+}
 /**
  * Setup function (executed once in the beginning of the simulation)
  */
 void AppConstraint::setup() {
     running = Graphics::open_window();
 
-    world = new World(-9.8);
+    world = new World(-9.81);
 
-    SDL_Surface *bg_surface = IMG_Load("./assets/angrybirds/background.png");
+
+    // Setup background picture -- use black if none is specified 
+    SDL_Surface *bg_surface = IMG_Load("./assets/whatever.png"); // TODO: find suitable background picture
     if (bg_surface) {
-        bg_texture =
-            SDL_CreateTextureFromSurface(Graphics::renderer, bg_surface);
+        bg_texture = SDL_CreateTextureFromSurface(Graphics::renderer, bg_surface);
         SDL_FreeSurface(bg_surface);
+    } else {
+        int window_width, window_height;
+        
+        getWindowSize(window_width, window_height);
+        // Fallback: create a black texture
+        SDL_Surface *black_surface = SDL_CreateRGBSurface(0, window_width, window_height, 32, 0, 0, 0, 0);
+        if (black_surface) {
+            SDL_FillRect(black_surface, NULL, SDL_MapRGB(black_surface->format, 0, 0, 0));
+            bg_texture = SDL_CreateTextureFromSurface(Graphics::renderer, black_surface);
+            SDL_FreeSurface(black_surface);
+        } else {
+            // Last resort: just set renderer clear color to black
+            SDL_SetRenderDrawColor(Graphics::renderer, 0, 0, 0, 255);
+            bg_texture = NULL;
+        }
     }
 
     // add bird
@@ -38,10 +65,10 @@ void AppConstraint::setup() {
         new Body(CircleShape(45), 100, Graphics::height() / 2.0 + 220, 3.0);
     bird->set_texture("./assets/angrybirds/bird-red.png");
     world->add_body(bird);
-
+    // add floor as 
     Body *floor =
         new Body(BoxShape(Graphics::width() - 50, 50), Graphics::width() / 2.0,
-                 Graphics::height() / 2.0 + 350, 0.0);
+                 Graphics::height() / 2.0 + 500, 0.0);
     floor->restitution = 0.1;
     Body *left_fence = new Body(BoxShape(50, Graphics::height() - 200), 0,
                                 Graphics::height() / 2.0 - 35, 0.0);
@@ -53,7 +80,7 @@ void AppConstraint::setup() {
     world->add_body(right_fence);
 
     // add stack of boxes
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 10; i++) {
         float mass = 10.0 / (float)i;
         Body *box = new Body(BoxShape(50, 50), Graphics::width() / 2.0 - 300,
                              floor->position.y - i * 55, mass);
@@ -62,6 +89,17 @@ void AppConstraint::setup() {
         box->restitution = 0.1;
         world->add_body(box);
     }
+
+        // add stack of boxes
+        for (int i = 1; i <= 10; i++) {
+            float mass = 10.0 / (float)i;
+            Body *box = new Body(BoxShape(50, 50), Graphics::width() / 2.0 - 255,
+                                 floor->position.y - i * 55, mass);
+            box->set_texture("./assets/angrybirds/wood-box.png");
+            box->friction = 0.9;
+            box->restitution = 0.0;
+            world->add_body(box);
+        }
 
     // add structure with blocks
     Body *plank1 = new Body(BoxShape(50, 150), Graphics::width() / 2.0 + 20,
@@ -102,31 +140,6 @@ void AppConstraint::setup() {
             world->add_body(box);
         }
     }
-
-    // add a bridge of connected steps and joints
-    int num_steps = 10;
-    int spacing = 33;
-    Body *start_step = new Body(BoxShape(80, 20), 200, 200, 0.0);
-    start_step->set_texture("./assets/angrybirds/rock-bridge-anchor.png");
-    world->add_body(start_step);
-    Body *last = floor;
-    for (int i = 1; i <= num_steps; i++) {
-        float x = start_step->position.x + 30 + (i * spacing);
-        float y = start_step->position.y + 20;
-        float mass = (i == num_steps) ? 0.0 : 3.0;
-        Body *step = new Body(CircleShape(15), x, y, mass);
-        step->set_texture("./assets/angrybirds/wood-bridge-step.png");
-        world->add_body(step);
-        JointConstraint *joint =
-            new JointConstraint(last, step, step->position);
-        world->add_constraint(joint);
-        last = step;
-    }
-
-    Body *end_step = new Body(BoxShape(80, 20), last->position.x + 60,
-                              last->position.y - 20, 0.0);
-    end_step->set_texture("./assets/angrybirds/rock-bridge-anchor.png");
-    world->add_body(end_step);
 
     // add pigs
     Body *pig1 = new Body(CircleShape(30), plank1->position.x + 80,
@@ -173,6 +186,14 @@ void AppConstraint::input() {
             }
             if (event.key.keysym.sym == SDLK_d) {
                 debug = !debug;
+            }
+            if (event.key.keysym.sym == SDLK_j) {
+                    //draw a line between joint objects
+    for (auto joint : world->get_constraints()) {
+        const Vec2 pa = joint->a->localspace_to_worldspace(joint->a_point);
+        const Vec2 pb = joint->b->localspace_to_worldspace(joint->b_point);
+        Graphics::draw_line(pa.x, pa.y, pb.x, pb.y, 0xFF555555);
+        }
             }
             break;
             /*
@@ -257,13 +278,6 @@ void AppConstraint::render() {
     Graphics::draw_texture(Graphics::width() / 2.0, Graphics::height() / 2.0,
                            Graphics::width(), Graphics::height(), 0.0f,
                            bg_texture);
-
-    // draw a line between joint objects
-    // for (auto joint : world->get_constraints()) {
-    // const Vec2 pa = joint->a->localspace_to_worldspace(joint->a_point);
-    // const Vec2 pb = joint->b->localspace_to_worldspace(joint->a_point);
-    // Graphics::draw_line(pa.x, pa.y, pb.x, pb.y, 0xFF555555);
-    // }
 
     for (auto body : world->get_bodies()) {
         // Uint32 color = body->is_colliding ? 0xFF0000FF : 0xFFFFFFFF;
