@@ -60,11 +60,11 @@ void AppConstraint::setup() {
         }
     }
 
-    // add bird
-    Body *bird =
+    // add basketball
+    Body *basketball=
         new Body(CircleShape(45), 100, Graphics::height() / 2.0 + 220, 3.0);
-    bird->set_texture("./assets/angrybirds/bird-red.png");
-    world->add_body(bird);
+    basketball->set_texture("./assets/basketball.png");
+    world->add_body(basketball);
     // add floor as 
     Body *floor =
         new Body(BoxShape(Graphics::width() - 50, 50), Graphics::width() / 2.0,
@@ -88,7 +88,7 @@ void AppConstraint::setup() {
         float mass = 10.0 / (float)i;
         Body *box = new Body(BoxShape(50, 50), Graphics::width() / 2.0 - 300,
                              floor->position.y - i * 55, mass);
-        box->set_texture("./assets/angrybirds/wood-box.png");
+        box->set_texture("./assets/wood-box.png");
         box->friction = 0.9;
         box->restitution = 0.1;
         world->add_body(box);
@@ -99,7 +99,7 @@ void AppConstraint::setup() {
             float mass = 10.0 / (float)i;
             Body *box = new Body(BoxShape(50, 50), Graphics::width() / 2.0 - 255,
                                  floor->position.y - i * 55, mass);
-            box->set_texture("./assets/angrybirds/wood-box.png");
+            box->set_texture("./assets/wood-box.png");
             box->friction = 0.9;
             box->restitution = 0.0;
             world->add_body(box);
@@ -113,9 +113,9 @@ void AppConstraint::setup() {
     Body *plank3 = new Body(BoxShape(250, 25), Graphics::width() / 2.0 + 100.0f,
                             floor->position.y - 200, 2.0);
     // plank3->restitution = 0.1;
-    plank1->set_texture("./assets/angrybirds/wood-plank-solid.png");
-    plank2->set_texture("./assets/angrybirds/wood-plank-solid.png");
-    plank3->set_texture("./assets/angrybirds/wood-plank-cracked.png");
+    plank1->set_texture("./assets/wood-plank-solid.png");
+    plank2->set_texture("./assets/wood-plank-solid.png");
+    plank3->set_texture("./assets/wood-plank-cracked.png");
 
     world->add_body(plank1);
     world->add_body(plank2);
@@ -126,7 +126,7 @@ void AppConstraint::setup() {
                                            Vec2(0, -30)};
     Body *triangle = new Body(PolygonShape(triangle_vertices),
                               plank3->position.x, plank3->position.y - 50, 0.5);
-    triangle->set_texture("./assets/angrybirds/wood-triangle.png");
+    triangle->set_texture("./assets/wood-triangle.png");
     world->add_body(triangle);
 
     // add pyramid of boxes
@@ -140,27 +140,27 @@ void AppConstraint::setup() {
             Body *box = new Body(BoxShape(50, 50), x, y, mass);
             box->friction = 0.9;
             box->restitution = 0.0;
-            box->set_texture("./assets/angrybirds/wood-box.png");
+            box->set_texture("./assets/wood-box.png");
             world->add_body(box);
         }
     }
 
-    // add pigs
-    Body *pig1 = new Body(CircleShape(30), plank1->position.x + 80,
+    // add rocks
+    Body *rock1 = new Body(CircleShape(30), plank1->position.x + 80,
                           floor->position.y - 50, 3.0);
-    Body *pig2 = new Body(CircleShape(30), plank2->position.x + 400,
+    Body *rock2 = new Body(CircleShape(30), plank2->position.x + 400,
                           floor->position.y - 50, 3.0);
-    Body *pig3 = new Body(CircleShape(30), plank2->position.x + 460,
+    Body *rock3 = new Body(CircleShape(30), plank2->position.x + 460,
                           floor->position.y - 50, 3.0);
-    Body *pig4 = new Body(CircleShape(30), 220, 130, 1.0);
-    pig1->set_texture("./assets/angrybirds/pig-1.png");
-    pig2->set_texture("./assets/angrybirds/pig-2.png");
-    pig3->set_texture("./assets/angrybirds/pig-1.png");
-    pig4->set_texture("./assets/angrybirds/pig-2.png");
-    world->add_body(pig1);
-    world->add_body(pig2);
-    world->add_body(pig3);
-    world->add_body(pig4);
+    Body *rock4 = new Body(CircleShape(30), 220, 130, 1.0);
+    rock1->set_texture("./assets/rock-round.png");
+    rock2->set_texture("./assets/rock-round.png");
+    rock3->set_texture("./assets/rock-round.png");
+    rock4->set_texture("./assets/rock-round.png");
+    world->add_body(rock1);
+    world->add_body(rock2);
+    world->add_body(rock3);
+    world->add_body(rock4);
 }
 
 /**
@@ -217,7 +217,7 @@ void AppConstraint::input() {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
                 Body *rock = new Body(CircleShape(30), x, y, 1.0);
-                rock->set_texture("./assets/angrybirds/rock-round.png");
+                rock->set_texture("./assets/rock-round.png");
                 rock->friction = 0.4;
                 world->add_body(rock);
             }
@@ -225,7 +225,7 @@ void AppConstraint::input() {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
                 Body *box = new Body(BoxShape(60, 60), x, y, 1.0);
-                box->set_texture("./assets/angrybirds/rock-box.png");
+                box->set_texture("./assets/rock-box.png");
                 box->angular_vel = 0.0;
                 box->friction = 0.9;
                 world->add_body(box);
