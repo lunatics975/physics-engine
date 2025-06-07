@@ -68,16 +68,20 @@ void AppConstraint::setup() {
     // add floor as 
     Body *floor =
         new Body(BoxShape(Graphics::width() - 50, 50), Graphics::width() / 2.0,
-                 Graphics::height() / 2.0 + 500, 0.0);
+                 Graphics::height(), 0.0);
     floor->restitution = 0.1;
     Body *left_fence = new Body(BoxShape(50, Graphics::height() - 200), 0,
                                 Graphics::height() / 2.0 - 35, 0.0);
     Body *right_fence =
         new Body(BoxShape(50, Graphics::height() - 200), Graphics::width(),
                  Graphics::height() / 2.0 - 35, 0.0);
+    Body *top =
+        new Body(BoxShape(Graphics::width() - 50, 50), Graphics::width() / 2.0,
+                0 , 0.0);
     world->add_body(floor);
     world->add_body(left_fence);
     world->add_body(right_fence);
+    world->add_body(top);
 
     // add stack of boxes
     for (int i = 1; i <= 10; i++) {
