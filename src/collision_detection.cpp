@@ -158,26 +158,6 @@ bool CollisionDetection::is_colliding_polygon_polygon(
     }
 
     return true;
-
-    /*
-    Contact contact;
-    contact.a = a;
-    contact.b = b;
-    // always pointing from a to b
-    if (ab_sep > ba_sep) {
-        contact.depth = -ab_sep;
-        contact.normal = a_axis.normal();
-        contact.start = a_point;
-        contact.end = a_point + contact.normal * contact.depth;
-    } else {
-        contact.depth = -ba_sep;
-        contact.normal = -b_axis.normal();
-        contact.start = b_point - contact.normal * contact.depth;
-        contact.end = b_point;
-    }
-
-    contacts.push_back(contact);
-    */
 }
 
 bool CollisionDetection::is_colliding_polygon_circle(

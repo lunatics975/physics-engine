@@ -71,14 +71,6 @@ void Body::update(float dt) {
     integrate_angular(dt);
 
     shape->update_vertices(rotation, position);
-
-    /*
-    bool is_polygon = shape->get_type() == POLYGON || shape->get_type() == BOX;
-    if (is_polygon) {
-        PolygonShape *polygon_shape = (PolygonShape *)shape;
-        polygon_shape->update_vertices(rotation, position);
-    }
-    */
 }
 
 void Body::set_texture(const char *texture_file_name) {

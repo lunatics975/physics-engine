@@ -200,18 +200,6 @@ void AppConstraint::input() {
         }
             }
             break;
-            /*
-        case SDL_KEYUP:
-            if (event.key.keysym.sym == SDLK_UP ||
-                event.key.keysym.sym == SDLK_DOWN) {
-                push_force.y = 0;
-            }
-            if (event.key.keysym.sym == SDLK_RIGHT ||
-                event.key.keysym.sym == SDLK_LEFT) {
-                push_force.x = 0;
-            }
-            break;
-            */
         case SDL_MOUSEBUTTONDOWN:
             if (event.button.button == SDL_BUTTON_LEFT) {
                 int x, y;
