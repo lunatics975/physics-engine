@@ -11,7 +11,6 @@
 
 World::World(float gravity) {
     G = -gravity;
-    std::cout << "World constructor called!" << std::endl;
 }
 
 World::~World() {
@@ -21,7 +20,6 @@ World::~World() {
     for (auto constraint : constraints) {
         delete constraint;
     }
-    std::cout << "World destructor called!" << std::endl;
 }
 
 void World::add_body(Body *body) { bodies.push_back(body); }
@@ -63,8 +61,6 @@ void World::update(float dt) {
         for (size_t j = i + 1; j < bodies.size(); j++) {
             Body *a = bodies[i];
             Body *b = bodies[j];
-            // a->is_colliding = false;
-            // b->is_colliding = false;
 
             std::vector<Contact> contacts;
             if (CollisionDetection::is_colliding(a, b, contacts)) {
@@ -79,7 +75,6 @@ void World::update(float dt) {
                         contact.a, contact.b, contact.start, contact.end,
                         contact.normal);
                     pens.push_back(penetration);
-                    // contact.resolve_collision();
                 }
             }
         }
@@ -100,43 +95,11 @@ void World::update(float dt) {
             constraint.solve();
         }
     }
-    for (auto &constraint : constraints) {
-        constraint->post_solve();
-    }
-    for (auto &constraint : pens) {
-        constraint.post_solve();
-    }
 
     // 3. integrate velocities (update vertices)
     for (auto &body : bodies) {
         body->integrate_velocities(dt);
     }
-
-    /*
-    for (auto body : bodies) {
-        body->update(dt);
-    }
-    */
-
-    // check_collisions();
-}
-
-void World::check_collisions() {
-    /*
-    for (size_t i = 0; i <= bodies.size() - 1; i++) {
-        for (size_t j = i + 1; j < bodies.size(); j++) {
-            Body *a = bodies[i];
-            Body *b = bodies[j];
-            // a->is_colliding = false;
-            // b->is_colliding = false;
-
-            Contact contact;
-            if (CollisionDetection::is_colliding(a, b, contact)) {
-                contact.resolve_collision();
-            }
-        }
-    }
-    */
 }
 
 void World::add_constraint(Constraint *constraint) {

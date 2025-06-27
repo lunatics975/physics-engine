@@ -6,11 +6,9 @@ Particle::Particle(float x, float y, float mass) {
     this->position = Vec2(x, y);
     this->mass = mass;
     this->inv_mass = mass != 0.0 ? (1.0 / mass) : 0.0;
-    std::cout << "Particle constructor called!" << std::endl;
 }
 
 Particle::~Particle() {
-    std::cout << "Particle destructor called!" << std::endl;
 }
 
 void Particle::apply_force(const Vec2 &force) { sum_forces += force; }

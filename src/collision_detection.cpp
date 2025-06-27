@@ -124,7 +124,6 @@ bool CollisionDetection::is_colliding_polygon_polygon(
                 ->world_vertices[(i + 1) % ref_shape->world_vertices.size()];
         int num_clipped = ref_shape->clip_segment_to_line(
             contact_points, clipped_points, c0, c1);
-        // std::cout << "num_clipped: " << num_clipped << std::endl;
         if (num_clipped < 2)
             break;
 
@@ -267,11 +266,6 @@ bool CollisionDetection::is_colliding_polygon_circle(
             circle->position - (contact.normal * circle_shape->radius);
         contact.end = contact.start + (contact.normal * contact.depth);
     }
-
-    // Graphics::draw_fill_circle(min_curr_vertex.x, min_curr_vertex.y, 5,
-    // 0xFF00FFFF);
-    // Graphics::draw_fill_circle(min_next_vertex.x, min_next_vertex.y, 5,
-    // 0xFF00FFFF);
 
     contacts.push_back(contact);
 

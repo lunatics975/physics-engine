@@ -97,10 +97,6 @@ void JointConstraint::pre_solve(const float dt) {
     bias = (beta / dt) * C;
 }
 
-void JointConstraint::post_solve() {
-    // TODO
-}
-
 void JointConstraint::solve() {
     // v = get_velocities()
     const VecN v = get_velocities();
@@ -153,10 +149,7 @@ PenetrationConstraint::PenetrationConstraint(Body *a, Body *b,
     friction = 0.0f;
 }
 
-/**
- * C = [[-n, -ra X n, n, rb X n], [-t, -ra X t, t, rb X t]] * [[va], [wa], [vb],
- * [wb]]
- */
+
 void PenetrationConstraint::pre_solve(const float dt) {
     // get collision points in world space
     const Vec2 pa = a->localspace_to_worldspace(a_point);
@@ -270,8 +263,4 @@ void PenetrationConstraint::solve() {
     a->apply_impulse_angular(impulses[2]);
     b->apply_impulse_linear(Vec2(impulses[3], impulses[4]));
     b->apply_impulse_angular(impulses[5]);
-}
-
-void PenetrationConstraint::post_solve() {
-    // TODO
 }

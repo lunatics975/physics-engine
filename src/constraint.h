@@ -26,7 +26,6 @@ class Constraint {
     // https://gcc.gnu.org/faq.html#vtables
     virtual void solve() {};
     virtual void pre_solve([[maybe_unused]] const float dt) {};
-    virtual void post_solve() {};
 };
 
 class JointConstraint : public Constraint {
@@ -40,7 +39,6 @@ class JointConstraint : public Constraint {
     JointConstraint(Body *a, Body *b, const Vec2 &anchor_point);
     void solve() override;
     void pre_solve(const float dt) override;
-    void post_solve() override;
 };
 
 class PenetrationConstraint : public Constraint {
@@ -60,7 +58,6 @@ class PenetrationConstraint : public Constraint {
                           const Vec2 &b_collision_point, const Vec2 &normal);
     void solve() override;
     void pre_solve(const float dt) override;
-    void post_solve() override;
 };
 
 #endif

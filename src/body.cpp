@@ -22,14 +22,11 @@ Body::Body(const Shape &shape, float x, float y, float mass)
     inv_I = I != 0.0 ? (1.0 / I) : 0.0;
 
     this->shape->update_vertices(rotation, position);
-
-    std::cout << "Body constructor called!" << std::endl;
 }
 
 Body::~Body() {
     delete shape;
     SDL_DestroyTexture(texture);
-    std::cout << "Body destructor called!" << std::endl;
 }
 
 void Body::apply_force(const Vec2 &force) { sum_forces += force; }

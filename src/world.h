@@ -28,7 +28,6 @@ class World {
     void apply_torque(float torque);
 
     void update(float dt);
-    void check_collisions();
 };
 
 #endif
