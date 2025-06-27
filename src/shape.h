@@ -10,7 +10,6 @@ struct Shape {
     virtual ~Shape() = default;
     virtual ShapeType get_type() const = 0; // pure virtual method
     virtual Shape *clone() const = 0;
-    // virtual float get_moment_of_inertia() const = 0;
 
     virtual float get_moment_of_inertia() const = 0;
 
