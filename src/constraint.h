@@ -28,19 +28,6 @@ class Constraint {
     virtual void pre_solve([[maybe_unused]] const float dt) {};
 };
 
-class JointConstraint : public Constraint {
-  private:
-    MatrixMN jacobian;
-    VecN cached_lambda;
-    float bias;
-
-  public:
-    JointConstraint();
-    JointConstraint(Body *a, Body *b, const Vec2 &anchor_point);
-    void solve() override;
-    void pre_solve(const float dt) override;
-};
-
 class PenetrationConstraint : public Constraint {
   private:
     MatrixMN jacobian;

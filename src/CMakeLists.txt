@@ -14,7 +14,6 @@ target_sources(
           graphics.cpp
           vec2.cpp
           particle.cpp
-          force.cpp
           shape.cpp
           body.cpp
           collision_detection.cpp
